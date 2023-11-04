@@ -2,7 +2,7 @@ import nmap
 import socket
 
 def server_ip(url):
-    global target_ips
+    target_ips = []
     try:
         # Perform the NSlookup to retrieve all IP addresses associated with the url
         addr_info = socket.getaddrinfo(url, None)
@@ -12,6 +12,7 @@ def server_ip(url):
         for ip_address in ip_addresses:
             if ip_address not in target_ips:
                 target_ips.append(ip_address)
+        return target_ips
     except socket.gaierror:
         print(f"Could not resolve the hostname {url}")
 
@@ -30,15 +31,13 @@ def get_open_ports(target):
 
 if __name__ == "__main__":
 
-    # Find ip addresses and add to list
-    target_ips = []
-    url = "ENTER HOST NAME"
-    server_ip(url)
-
     # Create a dictionary to store open ports for each IP address
     open_ports_dict = {}
 
     # Iterate through the list of IP addresses and scan for open ports
+    url = "ENTER HOST NAME"
+    target_ips = server_ip(url)
+
     for ip in target_ips:
         open_ports = get_open_ports(ip)
         open_ports_dict[ip] = open_ports
